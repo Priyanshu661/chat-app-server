@@ -1,3 +1,4 @@
+const { Sequelize } = require("sequelize");
 const sequelize = require("../database/db");
 const Message = require("../models/Message");
 const User = require("../models/User");
@@ -32,18 +33,22 @@ const send_message = async (req, res) => {
 
 const fetch_messages = async (req, res) => {
   try {
+const id = req.query.lastMsgId ? req.query.lastMsgId:-1;
     const messages = await Message.findAll({
       where: {
         UserId: req.user.id,
+        id: {
+          [Sequelize.Op.gt]: id,
+        },
       },
-      attributes:["message"]
-      
+      attributes: ["message", "id"],
     });
 
     const data=messages.map((item)=>{
       return {
             name:req.user.name,
-            message:item.message
+            message:item.message,
+            id:item.id
       }
     })
 
