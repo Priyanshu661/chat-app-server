@@ -7,6 +7,7 @@ const sequelize = require("./database/db");
 const Message = require("./models/Message");
 const User = require("./models/User");
 const Chat = require("./models/Chat");
+const GroupMember=require("./models/GroupMembers")
 
 const app = express();
 
@@ -23,9 +24,11 @@ User.hasMany(Message);
 
 Message.belongsTo(User);
 Chat.hasMany(Message);
-User.hasMany(Chat);
-Chat.hasMany(User);
+// User.hasMany(Chat);
+// Chat.hasMany(User);
 Message.belongsTo(Chat);
+User.belongsToMany(Chat, { through: GroupMember });
+Chat.belongsToMany(User, { through: GroupMember });
 
 sequelize
   .sync()

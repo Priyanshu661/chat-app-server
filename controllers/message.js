@@ -59,7 +59,28 @@ const id = req.query.lastMsgId ? req.query.lastMsgId:-1;
   }
 };
 
+
+const fetch_users=async(req,res)=>{
+  try {
+    const users = await User.findAll({
+      where: {
+        id: {
+          [Sequelize.Op.ne]: req.user.id,
+        },
+      },
+      attributes: ["name", "id"],
+    });
+
+   
+
+    return res.status(200).json({ success: true, data:users });
+  } catch (e) {
+    return res.status(400).json({ success: false, error: "Server Error" });
+  }
+}
+
 module.exports = {
   send_message,
-  fetch_messages
+  fetch_messages,
+  fetch_users
 };
