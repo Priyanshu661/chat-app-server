@@ -13,6 +13,9 @@ const Message = sequelize.define("Message", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  isFile: {
+    type: Sequelize.BOOLEAN,
+  },
 });
 
 module.exports = Message;
