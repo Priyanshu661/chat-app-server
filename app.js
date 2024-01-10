@@ -1,10 +1,8 @@
 require("dotenv").config();
 
-
 const express = require("express");
 const cors = require("cors");
 const http = require("http");
-
 
 const sequelize = require("./database/db");
 const Message = require("./models/Message");
@@ -23,14 +21,11 @@ const io = require("socket.io")(server, {
 io.on("connection", (socket) => {
   // console.log(socket.id, "");
 
-  socket.on("send-message",(chat_id)=>{
-
-    socket.emit("receive-message", chat_id);
-    // console.log(chat_id, "uuuuuuuuuuuuuudhhhhhwdusudhsdsdsdush");
-  })
+  socket.on("send-message", (chat_id) => {
+    io.emit("receive-message", chat_id);
+  
+  });
 });
-
-
 
 app.use(cors());
 
@@ -62,16 +57,12 @@ Chat.belongsTo(User, {
 sequelize
   .sync()
   .then((res) => {
-   
-
     console.log("DB Connected!");
   })
   .catch((e) => {
     console.log(e);
   });
 
- server.listen(process.env.PORT, () => {
-     console.log("server is running", process.env.PORT);
-   });
-
-
+server.listen(process.env.PORT, () => {
+  console.log("server is running", process.env.PORT);
+});
